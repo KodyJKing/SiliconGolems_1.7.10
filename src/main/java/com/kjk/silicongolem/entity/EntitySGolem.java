@@ -26,14 +26,23 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class EntitySGolem extends EntityGolem {
 	
+	public SharedNBT source;
+	
 	public EntitySGolem(World world) {
 		super(world);
+		
+		source = new SharedNBT("Source_" + Integer.toString(this.getEntityId()));
+		source.getNbt().setString("source", "");
+		if(worldObj.isRemote){
+			source.setDirty(true);
+		}
 	}
 	
 	@Override

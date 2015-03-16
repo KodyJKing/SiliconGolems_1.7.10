@@ -20,7 +20,7 @@ public class SharedNBTUpdate implements IMessage{
 		@Override
 		public IMessage onMessage(SharedNBTUpdate message, MessageContext ctx) {
 			SharedNBT nbt = SharedNBTManager.sharedResources.get(message.netId);
-			nbt.sharedNBT = message.nbt;
+			nbt.nbt = message.nbt;
 			if(ctx.side == Side.SERVER){
 				SharedNBTManager.network.sendToAll(message);
 			}
@@ -28,19 +28,20 @@ public class SharedNBTUpdate implements IMessage{
 				c.run();
 			}
 			nbt.updateCallbacks.clear();
+			nbt.setDirty(false);
 			return null;
 		}
 	 }
 
 	public String netId;
-	public NBTTagCompound nbt;
+	public NBTBase nbt;
 	
 	public SharedNBTUpdate(){
 	}
 	
 	public SharedNBTUpdate(SharedNBT s){
 		netId = s.netId;
-		nbt = s.sharedNBT;
+		nbt = s.nbt;
 	}
 	
 	@Override
@@ -48,7 +49,8 @@ public class SharedNBTUpdate implements IMessage{
 		PacketBuffer pb = new PacketBuffer(buf);
 		try {
 			netId = pb.readStringFromBuffer(32767);
-			nbt = pb.readNBTTagCompoundFromBuffer(); 
+			NBTTagCompound wrap = pb.readNBTTagCompoundFromBuffer(); 
+			nbt = wrap.getTag("tag");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -60,7 +62,9 @@ public class SharedNBTUpdate implements IMessage{
 		PacketBuffer pb = new PacketBuffer(buf);
 		try {
 			pb.writeStringToBuffer(netId);
-			pb.writeNBTTagCompoundToBuffer(nbt);
+			NBTTagCompound wrap = new NBTTagCompound();
+			wrap.setTag("tag", nbt);
+			pb.writeNBTTagCompoundToBuffer(wrap);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

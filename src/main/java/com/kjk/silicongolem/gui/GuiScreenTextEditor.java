@@ -18,13 +18,15 @@ import net.minecraft.util.EnumChatFormatting;
 
 public class GuiScreenTextEditor extends GuiScreenText{
 	
+	public static EntitySGolem golem;
+	
 	private TextEditor editor;
 	
 	private int scroll;
 	
     public void initGui()
     {
-		editor = new TextEditor("He's dead Jim", this.textWidth);
+		editor = new TextEditor(golem.source.getNbt().getString("source"), this.textWidth);
     	scroll = 0;
         Keyboard.enableRepeatEvents(true);
     }

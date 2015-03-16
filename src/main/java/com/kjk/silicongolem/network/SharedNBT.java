@@ -17,23 +17,21 @@ public class SharedNBT {
 	
 	String netId;
 	
-	NBTTagCompound sharedNBT;
+	NBTTagCompound nbt;
 	
 	List<EmptyCallback> updateCallbacks;
 	
 	public SharedNBT(String networkName){
 		netId = networkName;
+		this.nbt = new NBTTagCompound();
 		updateCallbacks = new LinkedList<EmptyCallback>();
 	}
-	public void getSharedNBT(EmptyCallback callback) {
-		if(isDirty()){
-			requestUpdate(callback);
-		}
+	public NBTTagCompound getNbt() {
+		return nbt;
 	}
 
-	public void setSharedNBT(NBTTagCompound sharedNBT) {
-		this.sharedNBT = sharedNBT;
-		SharedNBTManager.network.sendToServer(new SharedNBTUpdate(this));
+	public void setNbt(NBTTagCompound sharedNBT) {
+		this.nbt = sharedNBT;
 	}
 
 	boolean dirty;
@@ -46,9 +44,18 @@ public class SharedNBT {
 		this.dirty = dirty;
 	}
 	
+	private void sendUpdate(){
+		SharedNBTManager.network.sendToServer(new SharedNBTUpdate(this));
+	}
+	
 	private void requestUpdate(EmptyCallback callback) {
-		SharedNBTManager.network.sendToServer(new SharedNBTRequest(this));
-		updateCallbacks.add(callback);
+		if(isDirty()){
+			SharedNBTManager.network.sendToServer(new SharedNBTRequest(this));
+			updateCallbacks.add(callback);
+		}
+		else {
+			callback.run();
+		}
 	}
 	
 }
