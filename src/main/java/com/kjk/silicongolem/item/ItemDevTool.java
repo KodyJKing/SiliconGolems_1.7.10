@@ -58,11 +58,11 @@ public class ItemDevTool extends Item {
         }
         else
         {
+        	if(!player.isSneaking() && entity instanceof EntitySGolem){
+        		EntitySGolem golem = (EntitySGolem) entity;
+        		golem.runSource();
+        	}
         }
-    	if(!player.isSneaking() && entity instanceof EntitySGolem){
-    		EntitySGolem golem = (EntitySGolem) entity;
-    		golem.runSource();
-    	}
         return false;
     }
 	

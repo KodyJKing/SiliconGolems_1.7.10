@@ -15,6 +15,7 @@ public class APIList implements ClassShutter{
 	
 	static private List<Entry> entries = new LinkedList<Entry>();
 	static private Set<String> visibleClasses = new HashSet<String>();
+	static private Scriptable scope;
 	
 	public static void addAPI(String name, Class<? extends ScriptAPI> api){
 		entries.add(new Entry(name, api));

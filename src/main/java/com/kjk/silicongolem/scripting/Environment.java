@@ -9,6 +9,7 @@ public class Environment {
 	
 	Context context;
 	Scriptable topLevelScope, userScope;
+	ScriptThread thread;
 	private Entity owner;
 	
 	public Environment(){
@@ -19,12 +20,17 @@ public class Environment {
 	}
 	
 	public void run(String script){
-		try{
-		    context.evaluateString(userScope, script, "<cmd>", 0, null);
+		if (canLaunchThread()) {
+			thread = new ScriptThread(this, script);
+			thread.start();
 		}
-		catch(Exception e){
-			e.printStackTrace();
+	}
+	
+	public boolean canLaunchThread(){
+		if(thread == null || !thread.isAlive()){
+			return true;
 		}
+		return thread.kill();
 	}
 
 	public Entity getOwner() {
