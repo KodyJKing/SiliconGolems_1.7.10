@@ -6,6 +6,7 @@ import io.netty.buffer.Unpooled;
 import java.util.Random;
 
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.ContextFactory;
 
 import com.kjk.silicongolem.entity.EntitySGolem;
 import com.kjk.silicongolem.gui.GuiHandler;
@@ -13,6 +14,8 @@ import com.kjk.silicongolem.item.ItemDevTool;
 import com.kjk.silicongolem.network.GolemSoureUpdate;
 import com.kjk.silicongolem.proxy.CommonProxy;
 import com.kjk.silicongolem.scripting.APIList;
+import com.kjk.silicongolem.scripting.TestAPI;
+import com.kjk.silicongolem.scripting.sandbox.SandboxContextFactory;
 
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.Entity;
@@ -51,8 +54,6 @@ public class SGolem
     
     public static Item devTool;
     
-    public static APIList golemAPI;
-    
     @SidedProxy(clientSide = "com.kjk.silicongolem.proxy.ClientProxy", serverSide = "com.kjk.proxy.silicongolem.CommonProxy")
     public static CommonProxy proxy;
     
@@ -67,10 +68,13 @@ public class SGolem
     @EventHandler
     public void preInit(FMLInitializationEvent event)
     {	
+    	ContextFactory.initGlobal(new SandboxContextFactory());
+    	
     	network.registerMessage(GolemSoureUpdate.Handler.class, GolemSoureUpdate.class, 35, Side.SERVER);
     	NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
     	
-    	golemAPI = new APIList();
+    	APIList.addAPI("test", TestAPI.class);
+    	
     	proxy.registerRendering();
     	registerEntity(EntitySGolem.class, "sgolem", 0xFFFFCC, 0xCCCCA3);
     	

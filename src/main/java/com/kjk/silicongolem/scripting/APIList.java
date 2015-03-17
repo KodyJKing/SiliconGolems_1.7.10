@@ -13,36 +13,31 @@ import org.mozilla.javascript.Scriptable;
 
 public class APIList implements ClassShutter{
 	
-	private List<Entry> entries;
-	private Set<String> visibleClasses;
+	static private List<Entry> entries = new LinkedList<Entry>();
+	static private Set<String> visibleClasses = new HashSet<String>();
 	
-	public APIList(){
-		entries = new LinkedList<Entry>();
-		visibleClasses = new HashSet<String>();
-	}
-	
-	public void addAPI(String name, Class<? extends ScriptAPI> api){
+	public static void addAPI(String name, Class<? extends ScriptAPI> api){
 		entries.add(new Entry(name, api));
-		visibleClasses.add(api.getClass().getName());
-	}
-	
-	
-	public void addPeripheral(Class api){
 		visibleClasses.add(api.getName());
 	}
 	
-	public Scriptable subscribe(Context cx, Environment env){
-		cx.setClassShutter(this);
+	
+	public static void addPeripheral(Class api){
+		visibleClasses.add(api.getName());
+	}
+	
+	public static Scriptable subscribe(Context cx, Environment env){
 		Scriptable scope = cx.initStandardObjects();
 		for(Entry e: entries){
 			try{
+				System.out.println("Attempting to load api:  " + e.getName());
 				Class api = e.getApi();
 			    Constructor ctor = api.getConstructor(Environment.class);
 			    ctor.setAccessible(true);
 			    scope.put(e.getName(), scope, ctor.newInstance(env));
 			} catch(Exception er){
-				System.out.print("Failed to load api:  " + e.getName());
-				System.out.println(er.getMessage());
+				System.out.println("Failed to load api:  " + e.getName());
+				er.printStackTrace();
 			}
 			
 		}

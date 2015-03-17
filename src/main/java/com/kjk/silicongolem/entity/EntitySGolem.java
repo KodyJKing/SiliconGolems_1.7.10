@@ -8,6 +8,7 @@ import org.mozilla.javascript.Scriptable;
 
 import com.kjk.silicongolem.SGolem;
 import com.kjk.silicongolem.network.NetIDManager;
+import com.kjk.silicongolem.scripting.Environment;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -40,7 +41,34 @@ public class EntitySGolem extends EntityGolem {
 	static int NET_ID_CHANNEL = 12;
 	static String SOURCE_TAG = "source";
 	
+	public Environment env;
 	
+	
+	public EntitySGolem(World world) {
+		super(world);
+		
+		env = new Environment();
+		env.setOwner(this);
+		
+		dataWatcher.addObject(NET_ID_CHANNEL, 0);
+		dataWatcher.addObject(SOURCE_CHANNEL, "");
+		setSource("test.explode()");
+		
+		if(!hasCustomNameTag()){
+			setCustomNameTag("Ted " + (worldObj.rand.nextInt() % 1000 + 2000));
+		}
+		
+		if(!worldObj.isRemote){
+			NetIDManager.genNetId(12, this);
+		}
+		this.getEntityId();
+	}
+	
+	public void runSource(){
+		env.run(getSource());
+	}
+	
+
 	public int getNetId() {
 		return dataWatcher.getWatchableObjectInt(NET_ID_CHANNEL);
 	}
@@ -57,24 +85,6 @@ public class EntitySGolem extends EntityGolem {
 		dataWatcher.updateObject(SOURCE_CHANNEL, source);
 	}
 	
-	public EntitySGolem(World world) {
-		super(world);
-		dataWatcher.addObject(NET_ID_CHANNEL, 0);
-		dataWatcher.addObject(SOURCE_CHANNEL, "");
-		setSource("He's dead Jim");
-		if(!hasCustomNameTag()){
-			setCustomNameTag("Ted " + (worldObj.rand.nextInt() % 1000 + 2000));
-		}
-		if(!worldObj.isRemote){
-			NetIDManager.genNetId(12, this);
-		}
-		this.getEntityId();
-	}
-	
-	@Override
-	public void entityInit(){
-		super.entityInit();
-	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt){

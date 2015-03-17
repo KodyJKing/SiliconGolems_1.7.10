@@ -50,12 +50,19 @@ public class ItemDevTool extends Item {
     {
         if (entity.worldObj.isRemote)
         {
-        	if(entity instanceof EntitySGolem){
+        	if(player.isSneaking() &&entity instanceof EntitySGolem){
         		EntitySGolem golem = (EntitySGolem) entity;
         		openTextEditor(player.worldObj, player, golem);
         	}
             return true;
         }
+        else
+        {
+        }
+    	if(!player.isSneaking() && entity instanceof EntitySGolem){
+    		EntitySGolem golem = (EntitySGolem) entity;
+    		golem.runSource();
+    	}
         return false;
     }
 	
