@@ -9,8 +9,8 @@ import scala.actors.threadpool.Arrays;
 
 import com.kjk.silicongolem.SGolem;
 import com.kjk.silicongolem.common.Common;
-import com.kjk.silicongolem.common.Const;
 import com.kjk.silicongolem.entity.EntitySGolem;
+import com.kjk.silicongolem.network.GolemSoureUpdate;
 import com.kjk.silicongolem.texteditor.TextEditor;
 
 import net.minecraft.client.gui.GuiScreen;
@@ -19,13 +19,18 @@ import net.minecraft.util.EnumChatFormatting;
 
 public class GuiScreenTextEditor extends GuiScreenText{
 	
-	public static EntitySGolem golem;
+	private EntitySGolem golem;
 	
 	private TextEditor editor;
 	
 	private int scroll;
 	
-    public void initGui()
+    public GuiScreenTextEditor(EntitySGolem openGolem) {
+		super();
+		golem = openGolem;
+	}
+
+	public void initGui()
     {
 		editor = new TextEditor(golem.getSource(), this.textWidth);
     	scroll = 0;
@@ -34,7 +39,9 @@ public class GuiScreenTextEditor extends GuiScreenText{
     
     public void onGuiClosed()
     {
-    	golem.setSource(editor.toString());
+    	String source = editor.toString();
+    	golem.setSource(source);
+    	SGolem.network.sendToServer(new GolemSoureUpdate(golem));
         Keyboard.enableRepeatEvents(false);
     }
     

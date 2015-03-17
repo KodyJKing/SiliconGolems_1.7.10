@@ -10,6 +10,7 @@ import org.mozilla.javascript.Context;
 import com.kjk.silicongolem.entity.EntitySGolem;
 import com.kjk.silicongolem.gui.GuiHandler;
 import com.kjk.silicongolem.item.ItemDevTool;
+import com.kjk.silicongolem.network.GolemSoureUpdate;
 import com.kjk.silicongolem.proxy.CommonProxy;
 import com.kjk.silicongolem.scripting.APIList;
 
@@ -66,17 +67,14 @@ public class SGolem
     @EventHandler
     public void preInit(FMLInitializationEvent event)
     {	
-
+    	network.registerMessage(GolemSoureUpdate.Handler.class, GolemSoureUpdate.class, 35, Side.SERVER);
     	NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
     	
-    	proxy.registerRendering();
-    	
     	golemAPI = new APIList();
-    	
+    	proxy.registerRendering();
     	registerEntity(EntitySGolem.class, "sgolem", 0xFFFFCC, 0xCCCCA3);
     	
     	devTool = new ItemDevTool();
-    	
     	GameRegistry.registerItem(devTool, "devtool");
     }
     

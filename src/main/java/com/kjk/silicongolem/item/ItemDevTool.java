@@ -7,8 +7,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
 import com.kjk.silicongolem.SGolem;
-import com.kjk.silicongolem.common.Const;
 import com.kjk.silicongolem.entity.EntitySGolem;
+import com.kjk.silicongolem.gui.GuiHandler;
 import com.kjk.silicongolem.gui.GuiScreenTextEditor;
 
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -60,7 +60,7 @@ public class ItemDevTool extends Item {
     }
 	
 	public void openTextEditor(final World world, final EntityPlayer player, EntitySGolem golem){
-		GuiScreenTextEditor.golem = golem;
+		GuiHandler.setOpenGolem(golem);
 		player.openGui(SGolem.instance, 0, world, 0,0,0);
 	}
 	

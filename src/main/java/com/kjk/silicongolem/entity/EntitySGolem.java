@@ -1,10 +1,14 @@
 package com.kjk.silicongolem.entity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
 import com.kjk.silicongolem.SGolem;
-import com.kjk.silicongolem.common.Const;
+import com.kjk.silicongolem.network.NetIDManager;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -32,24 +36,39 @@ import net.minecraft.world.World;
 
 public class EntitySGolem extends EntityGolem {
 	
-	private String source;
+	static int SOURCE_CHANNEL = 31;
+	static int NET_ID_CHANNEL = 12;
+	static String SOURCE_TAG = "source";
+	
+	
+	public int getNetId() {
+		return dataWatcher.getWatchableObjectInt(NET_ID_CHANNEL);
+	}
+
+	private void setNetId(int netId) {
+		dataWatcher.updateObject(NET_ID_CHANNEL, netId);
+	}
 	
 	public String getSource() {
-		return dataWatcher.getWatchableObjectString(31);
+		return dataWatcher.getWatchableObjectString(SOURCE_CHANNEL);
 	}
 
 	public void setSource(String source) {
-		this.dataWatcher.updateObject(31, source);
+		dataWatcher.updateObject(SOURCE_CHANNEL, source);
 	}
 	
 	public EntitySGolem(World world) {
 		super(world);
-		this.dataWatcher.addObject(31, "");
+		dataWatcher.addObject(NET_ID_CHANNEL, 0);
+		dataWatcher.addObject(SOURCE_CHANNEL, "");
 		setSource("He's dead Jim");
 		if(!hasCustomNameTag()){
 			setCustomNameTag("Ted " + (worldObj.rand.nextInt() % 1000 + 2000));
 		}
-		
+		if(!worldObj.isRemote){
+			NetIDManager.genNetId(12, this);
+		}
+		this.getEntityId();
 	}
 	
 	@Override
@@ -60,26 +79,15 @@ public class EntitySGolem extends EntityGolem {
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt){
 		super.readEntityFromNBT(nbt);
-		setSource(nbt.getString(Const.sourceTag));
+		setSource(nbt.getString(SOURCE_TAG));
 		System.out.println("Read Golem NBT: " + nbt.toString());
 	}
 	
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt){
 		super.writeEntityToNBT(nbt);
-		nbt.setString(Const.sourceTag, getSource());
+		nbt.setString(SOURCE_TAG, getSource());
 		System.out.println("Write Golem NBT: " + nbt.toString());
-	}
-	
-	public void addTestAI(){
-		this.getNavigator().setAvoidsWater(true);
-		this.tasks.addTask(0 , new EntityAISwimming(this));
-		this.tasks.addTask(2 , new EntityAIAttackOnCollide(this, EntityLivingBase.class, 1.0D, false));
-		this.tasks.addTask(3, new EntityAIWander(this, 1.0D));
-		this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityLivingBase.class, 8.0F));
-		this.tasks.addTask(4, new EntityAILookIdle(this));
-		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
-		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityLivingBase.class, 0, true));
 	}
 	
     public boolean isAIEnabled()
@@ -141,6 +149,7 @@ public class EntitySGolem extends EntityGolem {
     @Override
     public void onDeath(DamageSource ds){
     	super.onDeath(ds);
+    	NetIDManager.remove(getNetId());
     }
     
     /**

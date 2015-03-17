@@ -49,7 +49,6 @@ public class APIList implements ClassShutter{
 		return scope;
 	}
 
-
 	@Override
 	public boolean visibleToScripts(String fullClassName) {
 		return visibleClasses.contains(fullClassName);
