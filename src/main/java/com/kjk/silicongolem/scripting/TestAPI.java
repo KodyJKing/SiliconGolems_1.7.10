@@ -17,7 +17,7 @@ public class TestAPI extends ScriptAPI {
 	public void explode(){
 		Entity owner = env.getOwner();
 		World world = owner.worldObj;
-		world.createExplosion(owner, owner.posX, owner.posY, owner.posZ, 7.0F, true);
+		world.createExplosion(null, owner.posX, owner.posY, owner.posZ, 7.0F, true);
 	}
 	
 	public void print(String msg){

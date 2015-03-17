@@ -20,13 +20,13 @@ public class Environment {
 	}
 	
 	public void run(String script){
-		if (canLaunchThread()) {
+		if (tryKillThread()) {
 			thread = new ScriptThread(this, script);
 			thread.start();
 		}
 	}
 	
-	public boolean canLaunchThread(){
+	public boolean tryKillThread(){
 		if(thread == null || !thread.isAlive()){
 			return true;
 		}

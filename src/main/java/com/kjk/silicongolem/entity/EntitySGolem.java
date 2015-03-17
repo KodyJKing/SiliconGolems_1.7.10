@@ -160,6 +160,7 @@ public class EntitySGolem extends EntityGolem {
     public void onDeath(DamageSource ds){
     	super.onDeath(ds);
     	NetIDManager.remove(getNetId());
+    	env.tryKillThread();
     }
     
     /**
