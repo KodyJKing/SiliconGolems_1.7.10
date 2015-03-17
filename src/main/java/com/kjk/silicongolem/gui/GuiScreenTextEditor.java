@@ -74,6 +74,8 @@ public class GuiScreenTextEditor extends GuiScreenText{
             	return;
             case 22:
             	String clip = GuiScreen.getClipboardString();
+            	editor.insert(editor.getCursor(), clip);
+            	editor.moveCursor(clip.length());
             	//paste
                 return;
             default:

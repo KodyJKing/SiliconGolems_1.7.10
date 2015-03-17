@@ -9,6 +9,17 @@ public class ScriptThread extends Thread {
 	
 	private int locks;
 	
+	public void lock(){
+		locks += 1;
+	}
+	
+	public void unlock(){
+		locks -= 1;
+		if(!env.isLive){
+			kill();
+		}
+	}
+	
 	public boolean kill(){
 		if(locks <= 0){
 			stop();

@@ -52,7 +52,7 @@ public class EntitySGolem extends EntityGolem {
 		
 		dataWatcher.addObject(NET_ID_CHANNEL, 0);
 		dataWatcher.addObject(SOURCE_CHANNEL, "");
-		setSource("test.explode()");
+		setSource("");
 		
 		if(!hasCustomNameTag()){
 			setCustomNameTag("Ted " + (worldObj.rand.nextInt() % 1000 + 2000));
@@ -160,7 +160,7 @@ public class EntitySGolem extends EntityGolem {
     public void onDeath(DamageSource ds){
     	super.onDeath(ds);
     	NetIDManager.remove(getNetId());
-    	env.tryKillThread();
+    	env.kill();
     }
     
     /**
