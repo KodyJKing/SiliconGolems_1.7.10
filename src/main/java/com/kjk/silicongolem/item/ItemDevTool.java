@@ -7,6 +7,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
 import com.kjk.silicongolem.SGolem;
+import com.kjk.silicongolem.common.Const;
 import com.kjk.silicongolem.entity.EntitySGolem;
 import com.kjk.silicongolem.gui.GuiScreenTextEditor;
 
@@ -50,14 +51,15 @@ public class ItemDevTool extends Item {
         if (entity.worldObj.isRemote)
         {
         	if(entity instanceof EntitySGolem){
-        		openTextEditor(player.worldObj, player, (EntitySGolem) entity);
+        		EntitySGolem golem = (EntitySGolem) entity;
+        		openTextEditor(player.worldObj, player, golem);
         	}
             return true;
         }
         return false;
     }
 	
-	public void openTextEditor(World world, EntityPlayer player, EntitySGolem golem){
+	public void openTextEditor(final World world, final EntityPlayer player, EntitySGolem golem){
 		GuiScreenTextEditor.golem = golem;
 		player.openGui(SGolem.instance, 0, world, 0,0,0);
 	}

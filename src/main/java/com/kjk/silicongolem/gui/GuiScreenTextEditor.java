@@ -9,6 +9,7 @@ import scala.actors.threadpool.Arrays;
 
 import com.kjk.silicongolem.SGolem;
 import com.kjk.silicongolem.common.Common;
+import com.kjk.silicongolem.common.Const;
 import com.kjk.silicongolem.entity.EntitySGolem;
 import com.kjk.silicongolem.texteditor.TextEditor;
 
@@ -26,13 +27,14 @@ public class GuiScreenTextEditor extends GuiScreenText{
 	
     public void initGui()
     {
-		editor = new TextEditor(golem.source.getNbt().getString("source"), this.textWidth);
+		editor = new TextEditor(golem.getSource(), this.textWidth);
     	scroll = 0;
         Keyboard.enableRepeatEvents(true);
     }
     
     public void onGuiClosed()
     {
+    	golem.setSource(editor.toString());
         Keyboard.enableRepeatEvents(false);
     }
     

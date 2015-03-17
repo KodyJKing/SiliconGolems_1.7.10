@@ -1,5 +1,6 @@
 package com.kjk.silicongolem.common;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
@@ -23,5 +24,4 @@ public class Common {
 	public static void broadcast(String msg){
 		MinecraftServer.getServer().addChatMessage(new ChatComponentText(msg));
 	}
-	
 }

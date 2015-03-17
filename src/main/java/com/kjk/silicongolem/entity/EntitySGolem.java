@@ -4,8 +4,7 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
 import com.kjk.silicongolem.SGolem;
-import com.kjk.silicongolem.network.SharedNBT;
-
+import com.kjk.silicongolem.common.Const;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -33,26 +32,43 @@ import net.minecraft.world.World;
 
 public class EntitySGolem extends EntityGolem {
 	
-	public SharedNBT source;
+	private String source;
+	
+	public String getSource() {
+		return dataWatcher.getWatchableObjectString(31);
+	}
+
+	public void setSource(String source) {
+		this.dataWatcher.updateObject(31, source);
+	}
 	
 	public EntitySGolem(World world) {
 		super(world);
-		
-		source = new SharedNBT("Source_" + Integer.toString(this.getEntityId()));
-		source.getNbt().setString("source", "");
-		if(worldObj.isRemote){
-			source.setDirty(true);
+		this.dataWatcher.addObject(31, "");
+		setSource("He's dead Jim");
+		if(!hasCustomNameTag()){
+			setCustomNameTag("Ted " + (worldObj.rand.nextInt() % 1000 + 2000));
 		}
+		
 	}
 	
 	@Override
+	public void entityInit(){
+		super.entityInit();
+	}
+
+	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt){
 		super.readEntityFromNBT(nbt);
+		setSource(nbt.getString(Const.sourceTag));
+		System.out.println("Read Golem NBT: " + nbt.toString());
 	}
 	
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt){
 		super.writeEntityToNBT(nbt);
+		nbt.setString(Const.sourceTag, getSource());
+		System.out.println("Write Golem NBT: " + nbt.toString());
 	}
 	
 	public void addTestAI(){
@@ -79,7 +95,7 @@ public class EntitySGolem extends EntityGolem {
     
     public void applyEntityAttributes(){
     	super.applyEntityAttributes();
-    	this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(80.0D);
+    	this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(1.0D);
     	this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.25D);
     }
     
@@ -120,5 +136,31 @@ public class EntitySGolem extends EntityGolem {
 
         this.playSound("mob.irongolem.throw", 1.0F, 1.0F);
         return flag;
+    }
+    
+    @Override
+    public void onDeath(DamageSource ds){
+    	super.onDeath(ds);
+    }
+    
+    /**
+     * Returns the sound this mob makes when it is hurt.
+     */
+    protected String getHurtSound()
+    {
+        return "mob.irongolem.hit";
+    }
+
+    /**
+     * Returns the sound this mob makes on death.
+     */
+    protected String getDeathSound()
+    {
+        return "mob.irongolem.death";
+    }
+    
+    protected void func_145780_a(int p_145780_1_, int p_145780_2_, int p_145780_3_, Block p_145780_4_)
+    {
+        this.playSound("mob.irongolem.walk", 1.0F, 1.0F);
     }
 }

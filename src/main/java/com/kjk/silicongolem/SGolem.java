@@ -10,9 +10,6 @@ import org.mozilla.javascript.Context;
 import com.kjk.silicongolem.entity.EntitySGolem;
 import com.kjk.silicongolem.gui.GuiHandler;
 import com.kjk.silicongolem.item.ItemDevTool;
-import com.kjk.silicongolem.network.SharedNBTManager;
-import com.kjk.silicongolem.network.SharedNBTRequest;
-import com.kjk.silicongolem.network.SharedNBTUpdate;
 import com.kjk.silicongolem.proxy.CommonProxy;
 import com.kjk.silicongolem.scripting.APIList;
 
@@ -69,11 +66,6 @@ public class SGolem
     @EventHandler
     public void preInit(FMLInitializationEvent event)
     {	
-    	network.registerMessage(SharedNBTRequest.RequestHandler.class, SharedNBTRequest.class, 0, Side.SERVER);
-    	network.registerMessage(SharedNBTUpdate.UpdateHandler.class, SharedNBTUpdate.class, 0, Side.SERVER);
-    	network.registerMessage(SharedNBTUpdate.UpdateHandler.class, SharedNBTUpdate.class, 0, Side.CLIENT);
-    	
-    	SharedNBTManager.network = network;
 
     	NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
     	
