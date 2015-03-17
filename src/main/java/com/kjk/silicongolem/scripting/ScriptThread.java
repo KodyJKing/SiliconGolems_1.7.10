@@ -7,6 +7,8 @@ public class ScriptThread extends Thread {
 	private Environment env;
 	private String script;
 	
+	private Context context;
+	
 	private int locks;
 	
 	public void lock(){
@@ -23,6 +25,7 @@ public class ScriptThread extends Thread {
 	public boolean kill(){
 		if(locks <= 0){
 			stop();
+			context.exit();
 			return true;
 		}
 		return false;
@@ -34,7 +37,12 @@ public class ScriptThread extends Thread {
 	}
 	
 	public void run(){
-		Context context = Context.enter();
-		context.evaluateString(env.userScope, script, "<cmd>", 0, null);
+		context = Context.enter();
+		try {
+			context.evaluateString(env.userScope, script, "<cmd>", 0, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		kill();
 	}
 }
