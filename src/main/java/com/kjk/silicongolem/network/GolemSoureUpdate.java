@@ -14,13 +14,13 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 
 public class GolemSoureUpdate implements IMessage {
 
-	int netId;
+	int entityId;
 	String source;
 	public GolemSoureUpdate(){
 	}
 	
 	public GolemSoureUpdate(EntitySGolem golem){
-		netId = golem.getNetId();
+		entityId = golem.getEntityId();
 		source = golem.getSource();
 	}
 	
@@ -28,7 +28,7 @@ public class GolemSoureUpdate implements IMessage {
 	public void fromBytes(ByteBuf buf) {
 		PacketBuffer pb = new PacketBuffer(buf);
 		try {
-			netId = pb.readInt();
+			entityId = pb.readInt();
 			source = pb.readStringFromBuffer(32767);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -40,7 +40,7 @@ public class GolemSoureUpdate implements IMessage {
 	public void toBytes(ByteBuf buf) {
 		PacketBuffer pb = new PacketBuffer(buf);
 		try {
-			pb.writeInt(netId);
+			pb.writeInt(entityId);
 			pb.writeStringToBuffer(source);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -52,7 +52,7 @@ public class GolemSoureUpdate implements IMessage {
 	    @Override
 	    public IMessage onMessage(GolemSoureUpdate message, MessageContext  ctx) {
 	    	EntityPlayer player =  ctx.getServerHandler().playerEntity;
-	    	EntitySGolem golem = (EntitySGolem) NetIDManager.get(message.netId);
+	    	EntitySGolem golem = (EntitySGolem) player.worldObj.getEntityByID(message.entityId);
 	    	golem.setSource(message.source);
 	        return null;
 	    }

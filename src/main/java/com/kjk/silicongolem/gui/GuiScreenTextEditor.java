@@ -23,7 +23,7 @@ public class GuiScreenTextEditor extends GuiScreenText{
 	
 	private TextEditor editor;
 	
-	private int scroll;
+	private int scrollY, scrollX;
 	
     public GuiScreenTextEditor(EntitySGolem openGolem) {
 		super();
@@ -32,8 +32,9 @@ public class GuiScreenTextEditor extends GuiScreenText{
 
 	public void initGui()
     {
-		editor = new TextEditor(golem.getSource(), this.textWidth);
-    	scroll = 0;
+		editor = new TextEditor(golem.getSource(), this.textWidth, false);
+    	scrollY = 0;
+    	scrollX = 0;
         Keyboard.enableRepeatEvents(true);
     }
     
@@ -120,11 +121,12 @@ public class GuiScreenTextEditor extends GuiScreenText{
 		int length = 0;
 		int i = 0;
 		for(char c : editor.toString().toCharArray()){
-			if(y - scroll > this.textHeight){
+			if(y - scrollY > this.textHeight){
 				break;
 			}
-			if(c != '\n' && y - scroll >= 0){
-				drawChar(x,y - scroll,c, EnumChatFormatting.GREEN);
+			int displayedX = x - scrollX;
+			if(c != '\n' && y - scrollY >= 0 && displayedX >= 0 && displayedX <= this.textWidth){
+				drawChar(x - scrollX ,y - scrollY,c, EnumChatFormatting.GREEN);
 			}
 			length++;
 			x++;
@@ -142,10 +144,11 @@ public class GuiScreenTextEditor extends GuiScreenText{
 		if(System.currentTimeMillis() % 1000 < 500){
 			return;
 		}
-		drawChar(editor.getCursorX(), editor.getCursorY() - scroll, '_', EnumChatFormatting.DARK_GREEN);
+		drawChar(editor.getCursorX() - scrollX, editor.getCursorY() - scrollY, '_', EnumChatFormatting.DARK_GREEN);
 	}
 	
 	private void clampScroll(){
-		scroll = Common.clamp(scroll, editor.getCursorY() - this.textHeight, editor.getCursorY());
+		scrollY = Common.clamp(scrollY, editor.getCursorY() - this.textHeight, editor.getCursorY());
+		scrollX = Common.clamp(scrollX, editor.getCursorX() - this.textWidth, editor.getCursorX());
 	}
 }

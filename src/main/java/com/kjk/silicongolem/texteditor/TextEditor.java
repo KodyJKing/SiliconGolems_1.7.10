@@ -10,7 +10,10 @@ import com.kjk.silicongolem.common.Common;
  */
 public class TextEditor {
 	
-	public TextEditor(String startText, int width){
+	boolean wordWrap, lineWrap;
+	
+	public TextEditor(String startText, int width, boolean lineWrap){
+		this.lineWrap = lineWrap;
 		text = new StringBuilder(startText);
 		textWidth = width;
 		textChanged();
@@ -164,7 +167,10 @@ public class TextEditor {
 	}
 	
 	public boolean shouldBreak(int i, int length){
-		return text.charAt(i) == '\n' || length + wordWidth(i) > this.textWidth;
+		if(wordWrap){
+			length += wordWidth(i);
+		}
+		return text.charAt(i) == '\n'|| (lineWrap && length > this.textWidth);
 	}
 	
 	private int wordWidth(int i){

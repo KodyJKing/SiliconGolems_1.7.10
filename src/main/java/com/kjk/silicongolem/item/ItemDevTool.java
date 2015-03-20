@@ -7,6 +7,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
 import com.kjk.silicongolem.SGolem;
+import com.kjk.silicongolem.common.Common;
 import com.kjk.silicongolem.entity.EntitySGolem;
 import com.kjk.silicongolem.gui.GuiHandler;
 import com.kjk.silicongolem.gui.GuiScreenTextEditor;
@@ -28,6 +29,8 @@ public class ItemDevTool extends Item {
 	
 	public static String name = "devtool";
 	
+	public static int guiMode = 1;
+	
 	public ItemDevTool(){
 		this.setUnlocalizedName(SGolem.MODID + "_" + name);
 		this.setTextureName(SGolem.MODID + ":" + name);
@@ -42,6 +45,11 @@ public class ItemDevTool extends Item {
 	@Override
     public ItemStack onItemRightClick(ItemStack item, World world, EntityPlayer player)
     {	
+		if(!world.isRemote){
+			return item;
+		}
+		guiMode *= -1;
+		Common.msg(player, "Gui mode: " + guiMode);
 		return item;
     }
 	
@@ -69,7 +77,7 @@ public class ItemDevTool extends Item {
 	
 	public void openTextEditor(final World world, final EntityPlayer player, EntitySGolem golem){
 		GuiHandler.setOpenGolem(golem);
-		player.openGui(SGolem.instance, 0, world, 0,0,0);
+		player.openGui(SGolem.instance, guiMode, world, 0,0,0);
 	}
 	
 }

@@ -1,31 +1,41 @@
 package com.kjk.silicongolem.scripting;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.world.World;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
-public class Environment {
+public abstract class Computer {
 	
 	Context context;
-	Scriptable topLevelScope, userScope;
+	public Scriptable excScope;
 	ScriptThread thread;
 	boolean isLive;
-	private Entity owner;
 	
-	void lockThread() {
+	public Map<String, APIPeripheral> peripherals;
+	
+	public void lockThread() {
 		thread.lock();
 	}
 
-	void unlockThread() {
+	public void unlockThread() {
 		thread.unlock();
 	}
 	
-	public Environment(){
+	public Computer(){
+		peripherals = new HashMap<String, APIPeripheral>();
 		context = Context.enter();
-		topLevelScope = APIList.subscribe(context, this);
-		userScope = context.initStandardObjects();
-		userScope.setParentScope(topLevelScope);
+		excScope = context.initStandardObjects();
+		
+		new APITest(this, "test");
 	}
 	
 	public void run(String script){
@@ -51,12 +61,14 @@ public class Environment {
 	public boolean threadLive(){
 		return thread != null && thread.isAlive();
 	}
-
-	public Entity getOwner() {
-		return owner;
+	
+	public World getWorld(){
+		return null;
 	}
-
-	public void setOwner(Entity owner) {
-		this.owner = owner;
+	
+	public void writeNBT(NBTTagCompound nbt){
+	}
+	
+	public void readNBT(NBTTagCompound nbt){
 	}
 }

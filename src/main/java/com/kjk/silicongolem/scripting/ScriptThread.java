@@ -4,7 +4,7 @@ import org.mozilla.javascript.Context;
 
 public class ScriptThread extends Thread {
 	
-	private Environment env;
+	private Computer env;
 	private String script;
 	
 	private Context context;
@@ -31,7 +31,7 @@ public class ScriptThread extends Thread {
 		return false;
 	}
 	
-	public ScriptThread(Environment env, String script){
+	public ScriptThread(Computer env, String script){
 		this.env = env;
 		this.script = script;
 	}
@@ -39,7 +39,7 @@ public class ScriptThread extends Thread {
 	public void run(){
 		context = Context.enter();
 		try {
-			context.evaluateString(env.userScope, script, "<cmd>", 0, null);
+			context.evaluateString(env.excScope, script, "<cmd>", 0, null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

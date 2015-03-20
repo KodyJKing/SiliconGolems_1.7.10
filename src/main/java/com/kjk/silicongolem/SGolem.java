@@ -13,8 +13,8 @@ import com.kjk.silicongolem.gui.GuiHandler;
 import com.kjk.silicongolem.item.ItemDevTool;
 import com.kjk.silicongolem.network.GolemSoureUpdate;
 import com.kjk.silicongolem.proxy.CommonProxy;
-import com.kjk.silicongolem.scripting.APIList;
-import com.kjk.silicongolem.scripting.TestAPI;
+import com.kjk.silicongolem.scripting.APIRegistry;
+import com.kjk.silicongolem.scripting.APITest;
 import com.kjk.silicongolem.scripting.sandbox.SandboxContextFactory;
 
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -73,7 +73,7 @@ public class SGolem
     	network.registerMessage(GolemSoureUpdate.Handler.class, GolemSoureUpdate.class, 35, Side.SERVER);
     	NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
     	
-    	APIList.addAPI("test", TestAPI.class);
+    	APIInit.load();
     	
     	proxy.registerRendering();
     	registerEntity(EntitySGolem.class, "sgolem", 0xFFFFCC, 0xCCCCA3);

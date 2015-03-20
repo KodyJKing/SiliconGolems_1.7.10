@@ -7,8 +7,8 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
 import com.kjk.silicongolem.SGolem;
-import com.kjk.silicongolem.network.NetIDManager;
-import com.kjk.silicongolem.scripting.Environment;
+import com.kjk.silicongolem.scripting.Computer;
+import com.kjk.silicongolem.scripting.computer.ComputerEntity;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -38,19 +38,16 @@ import net.minecraft.world.World;
 public class EntitySGolem extends EntityGolem {
 	
 	static int SOURCE_CHANNEL = 31;
-	static int NET_ID_CHANNEL = 12;
 	static String SOURCE_TAG = "source";
 	
-	public Environment env;
-	
+	public ComputerEntity comp;	
 	
 	public EntitySGolem(World world) {
 		super(world);
 		
-		env = new Environment();
-		env.setOwner(this);
+		comp = new ComputerEntity();
+		comp.setOwner(this);
 		
-		dataWatcher.addObject(NET_ID_CHANNEL, 0);
 		dataWatcher.addObject(SOURCE_CHANNEL, "");
 		setSource("");
 		
@@ -58,23 +55,11 @@ public class EntitySGolem extends EntityGolem {
 			setCustomNameTag("Ted " + (worldObj.rand.nextInt() % 1000 + 2000));
 		}
 		
-		if(!worldObj.isRemote){
-			NetIDManager.genNetId(12, this);
-		}
 		this.getEntityId();
 	}
 	
 	public void runSource(){
-		env.run(getSource());
-	}
-	
-
-	public int getNetId() {
-		return dataWatcher.getWatchableObjectInt(NET_ID_CHANNEL);
-	}
-
-	private void setNetId(int netId) {
-		dataWatcher.updateObject(NET_ID_CHANNEL, netId);
+		comp.run(getSource());
 	}
 	
 	public String getSource() {
@@ -159,8 +144,7 @@ public class EntitySGolem extends EntityGolem {
     @Override
     public void onDeath(DamageSource ds){
     	super.onDeath(ds);
-    	NetIDManager.remove(getNetId());
-    	env.kill();
+    	comp.kill();
     }
     
     /**
