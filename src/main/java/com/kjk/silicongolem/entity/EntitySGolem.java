@@ -47,6 +47,7 @@ public class EntitySGolem extends EntityGolem {
 		
 		comp = new ComputerEntity();
 		comp.setOwner(this);
+		comp.setAddress(Integer.toString(this.getEntityId()));
 		
 		dataWatcher.addObject(SOURCE_CHANNEL, "");
 		setSource("");

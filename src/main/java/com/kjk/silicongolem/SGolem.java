@@ -38,7 +38,6 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -57,9 +56,6 @@ public class SGolem
     @SidedProxy(clientSide = "com.kjk.silicongolem.proxy.ClientProxy", serverSide = "com.kjk.proxy.silicongolem.CommonProxy")
     public static CommonProxy proxy;
     
-    public static final SimpleNetworkWrapper network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
-    
-    
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
@@ -68,12 +64,9 @@ public class SGolem
     @EventHandler
     public void preInit(FMLInitializationEvent event)
     {	
-    	ContextFactory.initGlobal(new SandboxContextFactory());
+    	Network.load();
     	
-    	network.registerMessage(GolemSoureUpdate.Handler.class, GolemSoureUpdate.class, 35, Side.SERVER);
-    	NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
-    	
-    	APIInit.load();
+    	Scripting.load();
     	
     	proxy.registerRendering();
     	registerEntity(EntitySGolem.class, "sgolem", 0xFFFFCC, 0xCCCCA3);

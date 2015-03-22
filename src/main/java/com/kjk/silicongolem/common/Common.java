@@ -1,11 +1,19 @@
 package com.kjk.silicongolem.common;
 
+import io.netty.buffer.Unpooled;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 
 public class Common {
+	
+	public static int MAX_STRING = 32767;
+	
+	public static PacketBuffer emptyBuf(){
+		return new PacketBuffer(Unpooled.buffer());
+	}
 	
 	public static int clamp(int val, int min, int max){
 		if(val < min){

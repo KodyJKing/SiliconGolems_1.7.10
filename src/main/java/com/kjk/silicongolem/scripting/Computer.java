@@ -13,14 +13,19 @@ import net.minecraft.world.World;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
-public abstract class Computer {
+import com.kjk.silicongolem.Network;
+import com.kjk.silicongolem.network.AddressBook;
+import com.kjk.silicongolem.network.IStateful;
+import com.kjk.silicongolem.network.PartialUpdate;
+import com.kjk.silicongolem.network.Update;
+
+public abstract class Computer implements IStateful {
 	
 	Context context;
 	public Scriptable excScope;
 	ScriptThread thread;
 	boolean isLive;
-	
-	public Map<String, APIPeripheral> peripherals;
+	String address;
 	
 	public void lockThread() {
 		thread.lock();
@@ -31,11 +36,41 @@ public abstract class Computer {
 	}
 	
 	public Computer(){
-		peripherals = new HashMap<String, APIPeripheral>();
 		context = Context.enter();
 		excScope = context.initStandardObjects();
-		
-		new APITest(this, "test");
+		addAPI(new APITest(this), "test");
+	}
+	
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+		AddressBook.add(this);
+	}
+
+	public void addAPI(API api, String name){
+		APIRegistry.expose(api.getClass());
+		excScope.put(name, excScope, api);
+	}
+	
+	public void sendUpdate(IStateful toUpdate){
+		if(isRemote()){
+			Network.network.sendToServer(new Update(toUpdate));
+		}
+		else {
+			Network.network.sendToAll(new Update(toUpdate));
+		}
+	}
+	
+	public void sendPartialUpdate(PartialUpdate update){
+		if(isRemote()){
+			Network.network.sendToServer(update);
+		}
+		else {
+			Network.network.sendToAll(update);
+		}
 	}
 	
 	public void run(String script){
@@ -64,6 +99,10 @@ public abstract class Computer {
 	
 	public World getWorld(){
 		return null;
+	}
+	
+	public boolean isRemote(){
+		return getWorld().isRemote;
 	}
 	
 	public void writeNBT(NBTTagCompound nbt){

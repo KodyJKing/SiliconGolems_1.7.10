@@ -7,7 +7,7 @@ import org.lwjgl.input.Keyboard;
 
 import scala.actors.threadpool.Arrays;
 
-import com.kjk.silicongolem.SGolem;
+import com.kjk.silicongolem.Network;
 import com.kjk.silicongolem.common.Common;
 import com.kjk.silicongolem.entity.EntitySGolem;
 import com.kjk.silicongolem.network.GolemSoureUpdate;
@@ -42,7 +42,7 @@ public class GuiScreenTextEditor extends GuiScreenText{
     {
     	String source = editor.toString();
     	golem.setSource(source);
-    	SGolem.network.sendToServer(new GolemSoureUpdate(golem));
+    	Network.network.sendToServer(new GolemSoureUpdate(golem));
         Keyboard.enableRepeatEvents(false);
     }
     

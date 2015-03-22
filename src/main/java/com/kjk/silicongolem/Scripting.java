@@ -2,10 +2,8 @@ package com.kjk.silicongolem;
 
 import com.kjk.silicongolem.scripting.APIRegistry;
 import com.kjk.silicongolem.scripting.APITest;
-import com.kjk.silicongolem.scripting.PeripheralRegistry;
-import com.kjk.silicongolem.scripting.peripheral.APIConsole;
 
-public class APIInit {
+public class Scripting {
 	
 	public static void load(){
 		
@@ -14,9 +12,6 @@ public class APIInit {
 		for(Class c : visible){
 			APIRegistry.expose(c);
 		}
-		
-		APIRegistry.expose(APITest.class);
-		PeripheralRegistry.addPeripheral(APIConsole.class);
 		
 	}
 	

@@ -1,6 +1,9 @@
 package com.kjk.silicongolem.scripting.computer;
 
+import com.kjk.silicongolem.scripting.Computer;
+
 import net.minecraft.entity.Entity;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
 
 public class ComputerEntity extends ComputerConsole{

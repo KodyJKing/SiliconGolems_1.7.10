@@ -1,12 +1,16 @@
 package com.kjk.silicongolem.scripting;
 
+/*
+ * An API is meant to expose functionality to JavaScript.
+ * It is not meant to implement internal state or functionality.
+ * Do this in a Component and then add the API through it.
+ */
 public abstract class API {
 	
 	protected Computer comp;
 	
-	public API(Computer comp, String name){
+	public API(Computer comp){
 		this.comp = comp;
-		comp.excScope.put(name, comp.excScope, this);
 	}
 
 	protected void lockThread() {

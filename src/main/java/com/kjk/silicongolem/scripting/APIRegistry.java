@@ -18,12 +18,12 @@ public class APIRegistry implements ClassShutter{
 		visibleClasses.add(c.getName());
 	}
 	
-	static API loadAPI(Class<? extends API> api, Computer comp) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
-	    Constructor ctor;
-		ctor = api.getConstructor(Computer.class);
-		ctor.setAccessible(true);
-		return (API) ctor.newInstance(comp);
-	}
+//	static API loadAPI(Class<? extends API> api, Computer comp) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+//	    Constructor ctor;
+//		ctor = api.getConstructor(Computer.class);
+//		ctor.setAccessible(true);
+//		return (API) ctor.newInstance(comp);
+//	}
 	
 	@Override
 	public boolean visibleToScripts(String fullClassName) {

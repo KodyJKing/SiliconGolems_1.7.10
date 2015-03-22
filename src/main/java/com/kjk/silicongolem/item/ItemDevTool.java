@@ -48,8 +48,8 @@ public class ItemDevTool extends Item {
 		if(!world.isRemote){
 			return item;
 		}
-		guiMode *= -1;
-		Common.msg(player, "Gui mode: " + guiMode);
+//		guiMode *= -1;
+//		Common.msg(player, "Gui mode: " + guiMode);
 		return item;
     }
 	

@@ -2,6 +2,7 @@ package com.kjk.silicongolem.network;
 
 import java.io.IOException;
 
+import com.kjk.silicongolem.common.Common;
 import com.kjk.silicongolem.entity.EntitySGolem;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,7 +30,7 @@ public class GolemSoureUpdate implements IMessage {
 		PacketBuffer pb = new PacketBuffer(buf);
 		try {
 			entityId = pb.readInt();
-			source = pb.readStringFromBuffer(32767);
+			source = pb.readStringFromBuffer(Common.MAX_STRING);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
