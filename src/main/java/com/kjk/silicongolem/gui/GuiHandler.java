@@ -22,8 +22,6 @@ public class GuiHandler implements IGuiHandler {
 		switch(ID){
 		case 0:
 			return new GuiScreenTextEditor(getOpenGolem());
-		case 1:
-			return new GuiScreenConsole(openGolem.comp);
 		}
 		return null;
 	}

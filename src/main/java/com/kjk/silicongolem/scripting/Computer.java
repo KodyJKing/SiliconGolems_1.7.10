@@ -16,12 +16,8 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
 import com.kjk.silicongolem.Network;
-import com.kjk.silicongolem.network.AddressBook;
-import com.kjk.silicongolem.network.IStateful;
-import com.kjk.silicongolem.network.PartialUpdate;
-import com.kjk.silicongolem.network.Update;
 
-public abstract class Computer implements IStateful {
+public abstract class Computer {
 	
 	Context context;
 	public Scriptable excScope;
@@ -41,37 +37,10 @@ public abstract class Computer implements IStateful {
 		context = Context.enter();
 		excScope = context.initStandardObjects();
 	}
-	
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-		AddressBook.add(this);
-	}
 
 	public void addAPI(API api, String name){
 		APIRegistry.expose(api.getClass());
 		excScope.put(name, excScope, api);
-	}
-	
-	public void sendUpdate(IStateful toUpdate){
-		if(isRemote()){
-			Network.network.sendToServer(new Update(toUpdate));
-		}
-		else {
-			Network.network.sendToAll(new Update(toUpdate));
-		}
-	}
-	
-	public void sendPartialUpdate(PartialUpdate update){
-		if(isRemote()){
-			Network.network.sendToServer(update);
-		}
-		else {
-			Network.network.sendToAll(update);
-		}
 	}
 	
 	public void run(String script){
@@ -110,19 +79,5 @@ public abstract class Computer implements IStateful {
 	}
 	
 	public void readNBT(NBTTagCompound nbt){
-	}
-	
-	@Override
-	public void fromBytes(PacketBuffer buf) throws IOException {}
-
-	@Override
-	public void toBytes(PacketBuffer buf) throws IOException {}
-
-	@Override
-	public void partialUpdate(PacketBuffer buf) {}
-
-	@Override
-	public void onLoad() {
-		
-	}
+	}		
 }

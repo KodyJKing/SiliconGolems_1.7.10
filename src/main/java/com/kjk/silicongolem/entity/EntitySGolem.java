@@ -48,9 +48,6 @@ public class EntitySGolem extends EntityGolem {
 		
 		comp = new ComputerEntity();
 		comp.setOwner(this);
-		comp.setAddress(Integer.toString(this.getEntityId()));
-		System.out.println("Loaded computer with id: " + comp.getAddress());
-		comp.onLoad();
 		
 		dataWatcher.addObject(SOURCE_CHANNEL, "");
 		setSource("");

@@ -6,7 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
 
-public class ComputerEntity extends ComputerConsole{
+public class ComputerEntity extends Computer{
 
 	private Entity owner;
 	
