@@ -5,6 +5,7 @@ import org.mozilla.javascript.ContextFactory;
 import com.kjk.silicongolem.gui.GuiHandler;
 import com.kjk.silicongolem.network.GolemSoureUpdate;
 import com.kjk.silicongolem.network.PartialUpdate;
+import com.kjk.silicongolem.network.Request;
 import com.kjk.silicongolem.network.Update;
 import com.kjk.silicongolem.scripting.sandbox.SandboxContextFactory;
 
@@ -28,7 +29,9 @@ public class Network {
     	Network.network.registerMessage(PartialUpdate.Handler.class, PartialUpdate.class, 84, Side.SERVER);
     	Network.network.registerMessage(PartialUpdate.Handler.class, PartialUpdate.class, 28, Side.CLIENT);
     	
-    	NetworkRegistry.INSTANCE.registerGuiHandler(SGolem.instance, new GuiHandler());
+    	Network.network.registerMessage(Request.Handler.class, Request.class, 7, Side.SERVER);
+    	
+    	NetworkRegistry.INSTANCE.registerGuiHandler(SGolem.INSTANCE, new GuiHandler());
 		
 	}
 	

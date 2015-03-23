@@ -29,7 +29,6 @@ public class ComponentConsole extends Component {
 		if(console.size() > 50){
 			console.remove(0);
 		}
-		computer.sendUpdate(this);
 	}
 
 	public void clear() {
@@ -38,6 +37,14 @@ public class ComponentConsole extends Component {
 
 	public String get(int index) {
 		return console.get(index);
+	}
+
+	public int size() {
+		return console.size();
+	}
+	
+	public void sendALL(){
+		computer.sendUpdate(this);
 	}
 
 	@Override

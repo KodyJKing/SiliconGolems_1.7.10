@@ -5,8 +5,10 @@ import java.io.IOException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 
+import com.kjk.silicongolem.Network;
 import com.kjk.silicongolem.network.AddressBook;
 import com.kjk.silicongolem.network.IStateful;
+import com.kjk.silicongolem.network.Request;
 import com.kjk.silicongolem.scripting.API;
 import com.kjk.silicongolem.scripting.Computer;
 
@@ -65,6 +67,15 @@ public abstract class Component implements IStateful {
 	
 	public void writeNBT(NBTTagCompound nbt){
 		
+	}
+
+	public void requestUpdate() {
+		if(computer.getWorld().isRemote){
+			Network.network.sendToServer(new Request(this));
+		}
+	}
+
+	public void onLoad() {
 	}
 	
 }

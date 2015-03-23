@@ -21,5 +21,7 @@ public interface IStateful {
 	public void readNBT(NBTTagCompound nbt);
 	
 	public void writeNBT(NBTTagCompound nbt);
+
+	public void onLoad();
 	
 }

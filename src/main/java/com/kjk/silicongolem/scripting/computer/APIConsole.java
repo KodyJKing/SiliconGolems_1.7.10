@@ -14,6 +14,7 @@ public class APIConsole extends API{
 	public void print(String msg){
 		lockThread();
 		console.add(msg);
+		console.sendALL();
 		unlockThread();
 	}
 	

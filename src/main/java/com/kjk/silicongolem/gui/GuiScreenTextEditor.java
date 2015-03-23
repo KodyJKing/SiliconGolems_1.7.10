@@ -141,7 +141,7 @@ public class GuiScreenTextEditor extends GuiScreenText{
 	}
 	
 	private void drawCursor(){
-		if(System.currentTimeMillis() % 1000 < 500){
+		if(Common.blink(1000,500)){
 			return;
 		}
 		drawChar(editor.getCursorX() - scrollX, editor.getCursorY() - scrollY, '_', EnumChatFormatting.DARK_GREEN);

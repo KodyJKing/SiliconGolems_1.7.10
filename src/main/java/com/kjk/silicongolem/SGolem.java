@@ -14,7 +14,6 @@ import com.kjk.silicongolem.item.ItemDevTool;
 import com.kjk.silicongolem.network.GolemSoureUpdate;
 import com.kjk.silicongolem.proxy.CommonProxy;
 import com.kjk.silicongolem.scripting.APIRegistry;
-import com.kjk.silicongolem.scripting.APITest;
 import com.kjk.silicongolem.scripting.sandbox.SandboxContextFactory;
 
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -49,7 +48,7 @@ public class SGolem
     public static final String VERSION = "1.0";
     
     @Instance(MODID)
-    public static SGolem instance;
+    public static SGolem INSTANCE;
     
     public static Item devTool;
     
@@ -80,7 +79,7 @@ public class SGolem
     int entityID = EntityRegistry.findGlobalUniqueEntityId();
 
     EntityRegistry.registerGlobalEntityID(entityClass, name, entityID);
-    EntityRegistry.registerModEntity(entityClass, name, entityID, instance, 80, 3, true);
+    EntityRegistry.registerModEntity(entityClass, name, entityID, INSTANCE, 80, 3, true);
     EntityList.entityEggs.put(Integer.valueOf(entityID), new EntityList.EntityEggInfo(entityID, primaryColor, secondaryColor));
     }
     

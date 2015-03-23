@@ -1,5 +1,6 @@
 package com.kjk.silicongolem.scripting;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Map;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
 
 import org.mozilla.javascript.Context;
@@ -38,7 +40,6 @@ public abstract class Computer implements IStateful {
 	public Computer(){
 		context = Context.enter();
 		excScope = context.initStandardObjects();
-		addAPI(new APITest(this), "test");
 	}
 	
 	public String getAddress() {
@@ -109,5 +110,19 @@ public abstract class Computer implements IStateful {
 	}
 	
 	public void readNBT(NBTTagCompound nbt){
+	}
+	
+	@Override
+	public void fromBytes(PacketBuffer buf) throws IOException {}
+
+	@Override
+	public void toBytes(PacketBuffer buf) throws IOException {}
+
+	@Override
+	public void partialUpdate(PacketBuffer buf) {}
+
+	@Override
+	public void onLoad() {
+		
 	}
 }

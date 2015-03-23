@@ -2,9 +2,19 @@ package com.kjk.silicongolem.gui;
 
 public abstract class Screen {
 	
+	GuiScreenConsole gui;
+
+	public Screen(GuiScreenConsole gui){
+		this.gui = gui;
+	}
+	
 	public void backspace(){}
 	
+	public void copy(){}
+	
 	public void paste(String text){}
+	
+	public void enter(){}
 	
 	public void type(char c){}
 	
@@ -16,6 +26,11 @@ public abstract class Screen {
 	
 	public void arrowRight(){}
 	
-	public void draw(GuiScreenText gui){}
+	public void draw(){}
+
+	public void save(){}
+
+	public void exit() {
+	}
 	
 }

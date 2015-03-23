@@ -19,7 +19,13 @@ public class GuiHandler implements IGuiHandler {
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world,
 			int x, int y, int z) {
-		return new GuiScreenTextEditor(getOpenGolem());
+		switch(ID){
+		case 0:
+			return new GuiScreenTextEditor(getOpenGolem());
+		case 1:
+			return new GuiScreenConsole(openGolem.comp);
+		}
+		return null;
 	}
 
 	public static EntitySGolem getOpenGolem() {

@@ -15,6 +15,10 @@ public class Common {
 		return new PacketBuffer(Unpooled.buffer());
 	}
 	
+	public static boolean blink(int period, int duration){
+		return System.currentTimeMillis() % period < duration;
+	}
+	
 	public static int clamp(int val, int min, int max){
 		if(val < min){
 			return min;

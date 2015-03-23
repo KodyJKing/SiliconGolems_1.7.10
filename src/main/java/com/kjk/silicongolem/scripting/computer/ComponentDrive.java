@@ -18,13 +18,18 @@ public class ComponentDrive extends Component {
 		drive = new NBTTagCompound();
 	}
 	
+	@Override
+	public void onLoad() {
+		requestUpdate();
+	}
+
 	public void addAPI(){
 		api = new APIDrive(this);
 		computer.addAPI(api, "drive");
 	}
 	
 	public String readFile(String name){
-		return drive.getString(name);
+		return drive.hasKey(name) ? drive.getString(name) : "";
 	}
 	
 	public void appendFile(String name, String text){
@@ -47,9 +52,13 @@ public class ComponentDrive extends Component {
 	}
 	
 	public void recieveAPPEND(PacketBuffer buf) throws IOException{
+		System.out.println("Drive recieved APPEND: " + getAddress());
 		String name = buf.readStringFromBuffer(Common.MAX_STRING);
 		String text = buf.readStringFromBuffer(Common.MAX_STRING);
+		System.out.println("Name: " + name);
+		System.out.println("Text: " + text);
 		appendFile(name, text);
+		System.out.println(drive);
 	}
 	
 	public boolean clearFile(String name){
@@ -68,6 +77,7 @@ public class ComponentDrive extends Component {
 	}
 	
 	public void recieveCLEAR(PacketBuffer buf) throws IOException{
+		System.out.println("Drive recieved CLEAR");
 		clearFile(buf.readStringFromBuffer(Common.MAX_STRING));
 	}
 	
@@ -88,4 +98,31 @@ public class ComponentDrive extends Component {
 		}
 	}
 
+	@Override
+	public void fromBytes(PacketBuffer buf) throws IOException {
+		System.out.println("Drive recieved ALL");
+		NBTTagCompound nbt = buf.readNBTTagCompoundFromBuffer();
+		readNBT(nbt);
+	}
+
+	@Override
+	public void toBytes(PacketBuffer buf) throws IOException {
+		NBTTagCompound nbt = new NBTTagCompound();
+		writeNBT(nbt);
+		buf.writeNBTTagCompoundToBuffer(nbt);
+	}
+
+	@Override
+	public void readNBT(NBTTagCompound nbt) {
+		drive = nbt.getCompoundTag("drive");
+	}
+
+	@Override
+	public void writeNBT(NBTTagCompound nbt) {
+		System.out.println("Writing drive NBT: " + getAddress());
+		nbt.setTag("drive", drive);
+	}
+	
+	
+	
 }

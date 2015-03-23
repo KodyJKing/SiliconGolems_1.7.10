@@ -94,6 +94,10 @@ public class TextEditor {
 	}
 	
 	public void remove(int index){
+		if(index >= text.length() || text.length() == 0)
+		{
+			return;
+		}
 		text.deleteCharAt(index);
 		textChanged();
 	}

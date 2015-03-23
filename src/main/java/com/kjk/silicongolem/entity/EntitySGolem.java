@@ -7,6 +7,7 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
 import com.kjk.silicongolem.SGolem;
+import com.kjk.silicongolem.gui.GuiHandler;
 import com.kjk.silicongolem.scripting.Computer;
 import com.kjk.silicongolem.scripting.computer.ComputerEntity;
 
@@ -48,12 +49,14 @@ public class EntitySGolem extends EntityGolem {
 		comp = new ComputerEntity();
 		comp.setOwner(this);
 		comp.setAddress(Integer.toString(this.getEntityId()));
+		System.out.println("Loaded computer with id: " + comp.getAddress());
+		comp.onLoad();
 		
 		dataWatcher.addObject(SOURCE_CHANNEL, "");
 		setSource("");
 		
 		if(!hasCustomNameTag()){
-			setCustomNameTag("Ted " + (worldObj.rand.nextInt() % 1000 + 2000));
+			setCustomNameTag("Ted " + (worldObj.rand.nextInt() % 9000 + 1000));
 		}
 		
 		this.getEntityId();
@@ -71,11 +74,22 @@ public class EntitySGolem extends EntityGolem {
 		dataWatcher.updateObject(SOURCE_CHANNEL, source);
 	}
 	
+	public boolean interact(EntityPlayer player){
+		if(player.worldObj.isRemote && (player.getHeldItem() == null || player.getHeldItem().getItem() != SGolem.devTool)){
+			GuiHandler.setOpenGolem(this);
+			player.openGui(SGolem.INSTANCE, 1, player.worldObj, (int)player.posX, (int)player.posY, (int)player.posZ);
+			return true;
+		} else{
+			return super.interact(player);
+		}
+	}
+	
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt){
 		super.readEntityFromNBT(nbt);
 		setSource(nbt.getString(SOURCE_TAG));
+		comp.readNBT(nbt);
 		System.out.println("Read Golem NBT: " + nbt.toString());
 	}
 	
@@ -83,8 +97,11 @@ public class EntitySGolem extends EntityGolem {
 	public void writeEntityToNBT(NBTTagCompound nbt){
 		super.writeEntityToNBT(nbt);
 		nbt.setString(SOURCE_TAG, getSource());
+		comp.writeNBT(nbt);
 		System.out.println("Write Golem NBT: " + nbt.toString());
 	}
+	
+	// BOILER PLATE:
 	
     public boolean isAIEnabled()
     {
